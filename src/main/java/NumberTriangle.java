@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -132,17 +133,32 @@ public class NumberTriangle {
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
+        List<NumberTriangle> prevRow = new ArrayList<>();
 
-        String line = br.readLine();
-        while (line != null) {
+        String line;
+        while ((line = br.readLine()) != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            if (line.trim().isEmpty()) continue;
 
-            // TODO process the line
+            String[] values = line.trim().split("\\s+");
+            List<NumberTriangle> currentRow = new ArrayList<>();
 
-            //read the next line
-            line = br.readLine();
+            for (String val : values) {
+                currentRow.add(new NumberTriangle(Integer.parseInt(val)));
+            }
+
+            if (!prevRow.isEmpty()) {
+                for (int i = 0; i < prevRow.size(); i++) {
+                    prevRow.get(i).setLeft(currentRow.get(i));
+                    prevRow.get(i).setRight(currentRow.get(i + 1));
+                }
+            } else {
+                top = currentRow.get(0);
+            }
+
+            prevRow = currentRow;
+
         }
         br.close();
         return top;
